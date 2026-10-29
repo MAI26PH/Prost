@@ -6,6 +6,7 @@ using Prost.Api.Common.Diagnostics;
 using Prost.Api.Common.Validation;
 using Prost.Api.Data;
 using Prost.Api.Data.Diagnostics;
+using Prost.Api.Features;
 using Scalar.AspNetCore;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -93,7 +94,9 @@ builder.Services.AddMediator(options =>
     options.GenerateTypesAsInternal = true;
 });
 
-builder.Services.AddData(builder.Configuration);
+builder.Services
+    .AddData(builder.Configuration)
+    .AddFeatures();
 
 builder.Services
     .AddHealthChecks()
@@ -131,6 +134,8 @@ if (app.Environment.IsDevelopment())
     app.MapGet("/", () => Results.Redirect("/scalar"))
        .ExcludeFromDescription();
 }
+
+app.UseFeatures();
 
 app.MapSelfHealthCheck()
    .MapDataHealthChecks();
