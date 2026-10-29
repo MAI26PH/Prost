@@ -1,5 +1,9 @@
 using Asp.Versioning;
+using FluentValidation;
 using Microsoft.OpenApi;
+using Prost.Api.Common.DependencyInjection;
+using Prost.Api.Common.Diagnostics;
+using Prost.Api.Common.Validation;
 using Scalar.AspNetCore;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -61,6 +65,36 @@ builder.Services
         });
     });
 
+builder.Services.AddSingleton(TimeProvider.System);
+
+builder.Services.AddServicesFromAssembly(
+    typeof(Program).Assembly);
+
+builder.Services.AddOptionsFromAssembly(
+    typeof(Program).Assembly);
+
+builder.Services.AddEndpointsFromAssembly(
+    typeof(Program).Assembly);
+
+builder.Services.AddEndpointConfigurationsFromAssembly(
+    typeof(Program).Assembly);
+
+builder.Services.AddValidatorsFromAssembly(
+    typeof(Program).Assembly,
+    includeInternalTypes: true);
+
+builder.Services.AddMediator(options =>
+{
+    options.Assemblies = [typeof(Program).Assembly];
+    options.PipelineBehaviors = [typeof(ValidationBehavior<,>)];
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+    options.GenerateTypesAsInternal = true;
+});
+
+builder.Services
+    .AddHealthChecks()
+    .AddSelfHealthCheck();
+
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
@@ -92,5 +126,11 @@ if (app.Environment.IsDevelopment())
     app.MapGet("/", () => Results.Redirect("/scalar"))
        .ExcludeFromDescription();
 }
+
+app.MapSelfHealthCheck();
+
+app.MapEndpointConfigurations(
+    app.NewVersionedApi()
+       .MapGroup("api/v{version:apiVersion}"));
 
 app.Run();
