@@ -9,6 +9,8 @@ internal static class FeaturesDependencyInjectionExtensions
     {
         services.AddAuthenticationFeature();
 
+        services.AddAuthorization();
+
         return services;
     }
 
@@ -16,6 +18,8 @@ internal static class FeaturesDependencyInjectionExtensions
         this IApplicationBuilder app)
     {
         app.UseAuthentication();
+
+        app.UseAuthorization();
 
         return app;
     }
