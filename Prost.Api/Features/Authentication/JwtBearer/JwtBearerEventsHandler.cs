@@ -1,0 +1,28 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Prost.Api.Common.Claims;
+using Prost.Api.Features.Authentication.Services;
+
+namespace Prost.Api.Features.Authentication.JwtBearer;
+
+internal static class JwtBearerEventsHandler
+{
+    public static async Task OnTokenValidated(
+        this TokenValidatedContext context)
+    {
+        if (context.Principal is null)
+        {
+            context.Fail("The token principal is null.");
+
+            return;
+        }
+        var tokenFamilyRevocation = context.HttpContext.RequestServices
+            .GetRequiredService<ITokenFamilyRevocation>();
+
+        if (await tokenFamilyRevocation.IsRevokedAsync(
+            context.Principal.TokenFamilyId,
+            context.HttpContext.RequestAborted))
+        {
+            context.Fail("The token family has been revoked.");
+        }
+    }
+}
