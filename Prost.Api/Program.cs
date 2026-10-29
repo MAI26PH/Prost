@@ -4,6 +4,8 @@ using Microsoft.OpenApi;
 using Prost.Api.Common.DependencyInjection;
 using Prost.Api.Common.Diagnostics;
 using Prost.Api.Common.Validation;
+using Prost.Api.Data;
+using Prost.Api.Data.Diagnostics;
 using Scalar.AspNetCore;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -91,9 +93,12 @@ builder.Services.AddMediator(options =>
     options.GenerateTypesAsInternal = true;
 });
 
+builder.Services.AddData(builder.Configuration);
+
 builder.Services
     .AddHealthChecks()
-    .AddSelfHealthCheck();
+    .AddSelfHealthCheck()
+    .AddDataHealthChecks(builder.Configuration);
 
 builder.Services.AddProblemDetails();
 
@@ -127,7 +132,8 @@ if (app.Environment.IsDevelopment())
        .ExcludeFromDescription();
 }
 
-app.MapSelfHealthCheck();
+app.MapSelfHealthCheck()
+   .MapDataHealthChecks();
 
 app.MapEndpointConfigurations(
     app.NewVersionedApi()
