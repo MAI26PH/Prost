@@ -36,12 +36,6 @@ internal sealed class UpdatePasswordHandler(
         {
             return UpdatePasswordErrors.NotSet;
         }
-        if (passwordHasher.Verify(
-            password.Value.Value,
-            passwordCredential.PasswordHash.Value))
-        {
-            return Result.Success;
-        }
         var passwordHash = PasswordHash.Create(
             passwordHasher.Hash(password.Value.Value));
 
