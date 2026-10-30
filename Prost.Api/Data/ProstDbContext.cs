@@ -12,6 +12,7 @@ internal sealed class ProstDbContext(
     public DbSet<PasswordCredential> PasswordCredentials => Set<PasswordCredential>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<TokenFamily> TokenFamilies => Set<TokenFamily>();
+    public DbSet<Post> Posts => Set<Post>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
