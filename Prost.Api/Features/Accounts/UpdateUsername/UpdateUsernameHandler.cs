@@ -28,16 +28,6 @@ internal sealed class UpdateUsernameHandler(
         {
             return UpdateUsernameErrors.NotFound;
         }
-        if (account.Username == username.Value)
-        {
-            return Result.Success;
-        }
-        if (await context.Accounts.AnyAsync(
-            x => x.Username == username.Value,
-            cancellationToken))
-        {
-            return UpdateUsernameErrors.Taken;
-        }
         account.UpdateUsername(username.Value);
 
         try
