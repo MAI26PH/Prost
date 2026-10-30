@@ -44,6 +44,10 @@ internal sealed class TimestampsInterceptor(
                 {
                     createdAt.Value = now;
                 }
+                if (entry.Entity is IPublishedAt publishedAt)
+                {
+                    publishedAt.Value = now;
+                }
             }
             if (entry.State is EntityState.Modified)
             {
