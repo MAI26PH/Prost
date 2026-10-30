@@ -1,0 +1,28 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+COPY ["dotnet-tools.json", "."]
+RUN dotnet tool restore
+
+COPY ["Directory.Build.props", "."]
+COPY ["Directory.Packages.props", "."]
+COPY ["Prost.Api/Prost.Api.csproj", "Prost.Api/"]
+RUN dotnet restore Prost.Api/Prost.Api.csproj
+
+COPY . .
+
+RUN dotnet tool run dotnet-ef migrations bundle \
+    --project Prost.Api/Prost.Api.csproj \
+    --configuration Release \
+    --self-contained \
+    --output /artifacts/efbundle \
+    --force
+
+FROM mcr.microsoft.com/dotnet/runtime-deps:10.0
+WORKDIR /artifacts
+
+COPY --from=build /artifacts/efbundle ./efbundle
+
+USER $APP_UID
+
+ENTRYPOINT ["./efbundle"]
