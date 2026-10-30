@@ -178,6 +178,80 @@ namespace Prost.Api.Data.Migrations
                     b.HasAnnotation("CustomIndex:CompositeIndexes", "[{\"paths\":[\"Slug.Value\"],\"unique\":true}]");
                 });
 
+            modelBuilder.Entity("Prost.Api.Domain.Entities.PublishedPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("PublishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<uint>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("UpdatedOrPublishedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasComputedColumnSql("COALESCE(\"UpdatedAt\", \"PublishedAt\")", true);
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Body", "Prost.Api.Domain.Entities.PublishedPost.Body#Body", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<JsonElement>("Value")
+                                .HasColumnType("jsonb")
+                                .HasColumnName("Body");
+                        });
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Slug", "Prost.Api.Domain.Entities.PublishedPost.Slug#Slug", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(128)
+                                .HasColumnType("character varying(128)")
+                                .HasColumnName("Slug");
+                        });
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Title", "Prost.Api.Domain.Entities.PublishedPost.Title#Title", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(256)
+                                .HasColumnType("character varying(256)")
+                                .HasColumnName("Title");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("PostId")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedOrPublishedAt", "Id")
+                        .IsDescending();
+
+                    b.ToTable("PublishedPosts");
+
+                    b.HasAnnotation("CustomIndex:CompositeIndexes", "[{\"paths\":[\"Slug.Value\"],\"unique\":true}]");
+                });
+
             modelBuilder.Entity("Prost.Api.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -264,6 +338,25 @@ namespace Prost.Api.Data.Migrations
                     b.Navigation("Account");
                 });
 
+            modelBuilder.Entity("Prost.Api.Domain.Entities.PublishedPost", b =>
+                {
+                    b.HasOne("Prost.Api.Domain.Entities.Account", "Account")
+                        .WithMany("PublishedPosts")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prost.Api.Domain.Entities.Post", "Post")
+                        .WithOne("PublishedPost")
+                        .HasForeignKey("Prost.Api.Domain.Entities.PublishedPost", "PostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Post");
+                });
+
             modelBuilder.Entity("Prost.Api.Domain.Entities.RefreshToken", b =>
                 {
                     b.HasOne("Prost.Api.Domain.Entities.TokenFamily", "TokenFamily")
@@ -292,7 +385,14 @@ namespace Prost.Api.Data.Migrations
 
                     b.Navigation("Posts");
 
+                    b.Navigation("PublishedPosts");
+
                     b.Navigation("TokenFamilies");
+                });
+
+            modelBuilder.Entity("Prost.Api.Domain.Entities.Post", b =>
+                {
+                    b.Navigation("PublishedPost");
                 });
 
             modelBuilder.Entity("Prost.Api.Domain.Entities.TokenFamily", b =>
