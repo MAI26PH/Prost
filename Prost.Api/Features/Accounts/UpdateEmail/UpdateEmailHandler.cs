@@ -26,17 +26,7 @@ internal sealed class UpdateEmailHandler(
             x => x.Id == command.AccountId,
             cancellationToken) is not { } account)
         {
-            return UpdateUsernameErrors.NotFound;
-        }
-        if (account.Email == email.Value)
-        {
-            return Result.Success;
-        }
-        if (await context.Accounts.AnyAsync(
-            x => x.Email == email.Value,
-            cancellationToken))
-        {
-            return UpdateEmailErrors.Taken;
+            return UpdateEmailErrors.NotFound;
         }
         account.UpdateEmail(email.Value);
 
