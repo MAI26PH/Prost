@@ -1,7 +1,6 @@
 ﻿using EntityFramework.Exceptions.Common;
 using ErrorOr;
 using Mediator;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Prost.Api.Data;
 using Prost.Api.Data.Exceptions;
@@ -43,24 +42,10 @@ internal sealed class SignUpHandler(
 
         if (errors.Count > 0) return errors;
 
-        var account = await Account
-            .Create(
-                AccountId.Create(),
-                username.Value,
-                email.Value)
-            .ToErrorOr()
-            .FailIfAsync(
-                account => context.Accounts.AnyAsync(
-                    x => x.Username == account.Username,
-                    cancellationToken),
-                SignUpErrors.UsernameTaken)
-            .FailIfAsync(
-                account => context.Accounts.AnyAsync(
-                    x => x.Email == account.Email,
-                    cancellationToken),
-                SignUpErrors.EmailTaken);
-
-        if (account.IsError) return account.Errors;
+        var account = Account.Create(
+            AccountId.Create(),
+            username.Value,
+            email.Value);
 
         var passwordHash = PasswordHash.Create(
             passwordHasher.Hash(password.Value.Value));
@@ -69,7 +54,7 @@ internal sealed class SignUpHandler(
 
         var passwordCredential = PasswordCredential.Create(
             PasswordCredentialId.Create(),
-            account.Value.Id,
+            account.Id,
             passwordHash.Value);
 
         var issuedRefreshToken = refreshTokenIssuer.Issue();
@@ -81,7 +66,7 @@ internal sealed class SignUpHandler(
 
         var tokenFamily = TokenFamily.Create(
             TokenFamilyId.Create(),
-            account.Value.Id);
+            account.Id);
 
         var now = time.GetUtcNow();
 
@@ -97,7 +82,7 @@ internal sealed class SignUpHandler(
 
         if (refreshToken.IsError) return refreshToken.Errors;
 
-        context.Accounts.Add(account.Value);
+        context.Accounts.Add(account);
 
         context.PasswordCredentials.Add(passwordCredential);
 
