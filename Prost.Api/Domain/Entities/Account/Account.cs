@@ -37,6 +37,7 @@ internal sealed class Account :
     public PasswordCredential? PasswordCredential { get; }
     public ICollection<TokenFamily> TokenFamilies { get; } = [];
     public ICollection<Post> Posts { get; } = [];
+    public ICollection<PublishedPost> PublishedPosts { get; } = [];
 
     public uint RowVersion { get; }
 

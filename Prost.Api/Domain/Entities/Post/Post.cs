@@ -39,6 +39,7 @@ internal sealed class Post :
     public DateTimeOffset UpdatedOrCreatedAt { get; }
 
     public Account Account { get; } = null!;
+    public PublishedPost? PublishedPost { get; }
 
     public uint RowVersion { get; }
 
