@@ -7,4 +7,4 @@ namespace Prost.Api.Features.Accounts;
 internal sealed record UpdateEmailCommand(
     AccountId AccountId,
     string Email
-) : IRequest<ErrorOr<Success>>;
+) : IRequest<ErrorOr<UpdateEmailResponse>>;
