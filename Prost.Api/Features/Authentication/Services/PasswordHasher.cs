@@ -1,15 +1,9 @@
 ﻿using Prost.Api.Common.Attributes;
+using Prost.Api.Common.Services;
 using System.Buffers.Text;
 using System.Security.Cryptography;
 
 namespace Prost.Api.Features.Authentication.Services;
-
-internal interface IPasswordHasher
-{
-    string Hash(string password);
-
-    bool Verify(string password, string? passwordHash);
-}
 
 [Service<IPasswordHasher>(ServiceLifetime.Singleton)]
 internal sealed class PasswordHasher : IPasswordHasher

@@ -2,19 +2,13 @@
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Prost.Api.Common.Attributes;
+using Prost.Api.Common.Services;
 using Prost.Api.Domain.Entities;
 using Prost.Api.Features.Authentication.Options;
 using System.Security.Claims;
 using System.Text;
 
 namespace Prost.Api.Features.Authentication.Services;
-
-internal interface IAccessTokenIssuer
-{
-    string Issue(
-        AccountId accountId,
-        TokenFamilyId tokenFamilyId);
-}
 
 [Service<IAccessTokenIssuer>(ServiceLifetime.Singleton)]
 internal sealed class AccessTokenIssuer(

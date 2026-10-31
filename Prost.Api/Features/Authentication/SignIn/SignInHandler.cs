@@ -2,11 +2,11 @@
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Prost.Api.Common.Services;
 using Prost.Api.Data;
 using Prost.Api.Domain.Entities;
 using Prost.Api.Domain.ValueObjects;
 using Prost.Api.Features.Authentication.Options;
-using Prost.Api.Features.Authentication.Services;
 
 namespace Prost.Api.Features.Authentication;
 

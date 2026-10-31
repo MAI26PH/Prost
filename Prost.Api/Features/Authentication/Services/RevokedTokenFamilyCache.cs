@@ -1,21 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
 using Prost.Api.Common.Attributes;
+using Prost.Api.Common.Services;
 using Prost.Api.Domain.Entities;
 using Prost.Api.Features.Authentication.Options;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Prost.Api.Features.Authentication.Services;
-
-internal interface IRevokedTokenFamilyCache
-{
-    Task RevokeAsync(
-        TokenFamilyId id,
-        CancellationToken cancellationToken = default);
-
-    Task<bool> IsRevokedAsync(
-        TokenFamilyId id,
-        CancellationToken cancellationToken = default);
-}
 
 [Service<IRevokedTokenFamilyCache>(ServiceLifetime.Singleton)]
 internal sealed class RevokedTokenFamilyCache(
