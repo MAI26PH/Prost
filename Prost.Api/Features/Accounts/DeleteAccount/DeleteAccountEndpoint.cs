@@ -20,7 +20,9 @@ internal sealed class DeleteAccountEndpoint :
                     CancellationToken cancellationToken) =>
                 {
                     var result = await sender.Send(
-                        new DeleteAccountCommand(principal.AccountId),
+                        new DeleteAccountCommand(
+                            principal.AccountId,
+                            principal.TokenFamilyId),
                         cancellationToken);
 
                     return result.Match(
