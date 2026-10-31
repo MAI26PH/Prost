@@ -2,6 +2,7 @@
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Prost.Api.Common.Caching;
 using Prost.Api.Common.Services;
 using Prost.Api.Data;
 using Prost.Api.Domain.Entities;

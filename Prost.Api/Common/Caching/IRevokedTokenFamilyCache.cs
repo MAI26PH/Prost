@@ -1,6 +1,6 @@
 ﻿using Prost.Api.Domain.Entities;
 
-namespace Prost.Api.Common.Services;
+namespace Prost.Api.Common.Caching;
 
 internal interface IRevokedTokenFamilyCache
 {

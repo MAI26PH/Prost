@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Prost.Api.Common.Caching;
 using Prost.Api.Common.Claims;
-using Prost.Api.Common.Services;
 
 namespace Prost.Api.Features.Authentication.JwtBearer;
 
