@@ -31,6 +31,7 @@ internal static class AuthenticationDependencyInjectionExtensions
                     ValidAlgorithms = [jwtOptions.Value.Algorithm],
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(jwtOptions.Value.SigningKey)),
+                    ClockSkew = TimeSpan.Zero
                 };
                 bearerOptions.Events = new()
                 {
