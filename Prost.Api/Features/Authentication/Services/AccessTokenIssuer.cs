@@ -11,11 +11,9 @@ namespace Prost.Api.Features.Authentication.Services;
 
 internal interface IAccessTokenIssuer
 {
-    Task<string> IssueAsync(
+    string Issue(
         AccountId accountId,
-        TokenFamilyId tokenFamilyId,
-        Func<TokenFamilyId, DateTimeOffset, CancellationToken, Task> onIssued,
-        CancellationToken cancellationToken = default);
+        TokenFamilyId tokenFamilyId);
 }
 
 [Service<IAccessTokenIssuer>(ServiceLifetime.Singleton)]
@@ -31,11 +29,9 @@ internal sealed class AccessTokenIssuer(
 
     private readonly JsonWebTokenHandler handler = new();
 
-    public async Task<string> IssueAsync(
+    public string Issue(
         AccountId accountId,
-        TokenFamilyId tokenFamilyId,
-        Func<TokenFamilyId, DateTimeOffset, CancellationToken, Task> onIssued,
-        CancellationToken cancellationToken = default)
+        TokenFamilyId tokenFamilyId)
     {
         var expiresAt = time.GetUtcNow().AddMinutes(
             options.Value.ExpirationInMinutes);
@@ -56,13 +52,6 @@ internal sealed class AccessTokenIssuer(
             Subject = new ClaimsIdentity(claims),
             SigningCredentials = signingCredentials
         };
-        var token = handler.CreateToken(descriptor);
-
-        await onIssued(
-            tokenFamilyId,
-            expiresAt,
-            cancellationToken);
-
-        return token;
+        return handler.CreateToken(descriptor);
     }
 }

@@ -18,7 +18,6 @@ internal sealed class SignUpHandler(
     IPasswordHasher passwordHasher,
     IAccessTokenIssuer accessTokenIssuer,
     IRefreshTokenIssuer refreshTokenIssuer,
-    ITokenFamilyRevocation tokenFamilyRevocation,
     IOptions<RefreshTokenOptions> options
 ) : IRequestHandler<SignUpCommand, ErrorOr<SignUpResponse>>
 {
@@ -102,11 +101,9 @@ internal sealed class SignUpHandler(
         {
             return SignUpErrors.EmailTaken;
         }
-        var issuedAccessToken = await accessTokenIssuer.IssueAsync(
+        var issuedAccessToken = accessTokenIssuer.Issue(
             tokenFamily.AccountId,
-            tokenFamily.Id,
-            tokenFamilyRevocation.SetAsync,
-            cancellationToken);
+            tokenFamily.Id);
 
         return new SignUpResponse(
             AccessToken: issuedAccessToken,

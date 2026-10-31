@@ -17,7 +17,6 @@ internal sealed class SignInHandler(
     IPasswordHasher passwordHasher,
     IAccessTokenIssuer accessTokenIssuer,
     IRefreshTokenIssuer refreshTokenIssuer,
-    ITokenFamilyRevocation tokenFamilyRevocation,
     IOptions<RefreshTokenOptions> options
 ) : IRequestHandler<SignInCommand, ErrorOr<SignInResponse>>
 {
@@ -74,11 +73,9 @@ internal sealed class SignInHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        var issuedAccessToken = await accessTokenIssuer.IssueAsync(
+        var issuedAccessToken = accessTokenIssuer.Issue(
             tokenFamily.AccountId,
-            tokenFamily.Id,
-            tokenFamilyRevocation.SetAsync,
-            cancellationToken);
+            tokenFamily.Id);
 
         return new SignInResponse(
             AccessToken: issuedAccessToken,

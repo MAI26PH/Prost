@@ -82,11 +82,9 @@ internal sealed class RefreshTokenHandler(
         {
             return RefreshTokenErrors.ConcurrencyConflict;
         }
-        var issuedAccessToken = await accessTokenIssuer.IssueAsync(
+        var issuedAccessToken = accessTokenIssuer.Issue(
             tokenFamily.AccountId,
-            tokenFamily.Id,
-            tokenFamilyRevocation.SetAsync,
-            cancellationToken);
+            tokenFamily.Id);
 
         return new RefreshTokenResponse(
             AccessToken: issuedAccessToken,
