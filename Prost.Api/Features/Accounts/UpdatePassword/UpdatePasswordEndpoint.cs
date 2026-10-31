@@ -28,7 +28,7 @@ internal sealed class UpdatePasswordEndpoint :
                         cancellationToken);
 
                     return result.Match(
-                        _ => Results.NoContent(),
+                        Results.Ok,
                         ErrorResults.Problem);
                 })
             .RequireAuthorization()

@@ -7,4 +7,4 @@ namespace Prost.Api.Features.Accounts;
 internal sealed record UpdatePasswordCommand(
     AccountId AccountId,
     string Password
-) : IRequest<ErrorOr<Success>>;
+) : IRequest<ErrorOr<UpdatePasswordResponse>>;
