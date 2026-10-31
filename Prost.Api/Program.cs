@@ -48,8 +48,9 @@ builder.Services
 
             schema.Type = JsonSchemaType.String;
 
-            schema.Enum = [.. Enum.GetNames(type).Select(
-                name => JsonValue.Create(name))
+            schema.Enum =
+            [
+                .. Enum.GetNames(type).Select(name => JsonValue.Create(name))
             ];
             return Task.CompletedTask;
         });
