@@ -15,6 +15,10 @@ internal sealed class DeleteAccountHandler(
         DeleteAccountCommand command,
         CancellationToken cancellationToken)
     {
+        var hasPublishedPosts = await context.PublishedPosts.AnyAsync(
+            x => x.AccountId == command.AccountId,
+            cancellationToken);
+
         await context.Accounts
             .Where(x => x.Id == command.AccountId)
             .ExecuteDeleteAsync(cancellationToken);
@@ -23,6 +27,12 @@ internal sealed class DeleteAccountHandler(
             $"accounts:{command.AccountId}",
             token: cancellationToken);
 
+        if (hasPublishedPosts)
+        {
+            await cache.RemoveByTagAsync(
+                "published-posts",
+                token: cancellationToken);
+        }
         return Result.Success;
     }
 }
