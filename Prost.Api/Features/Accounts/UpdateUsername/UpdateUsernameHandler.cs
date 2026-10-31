@@ -46,6 +46,14 @@ internal sealed class UpdateUsernameHandler(
             $"accounts:{command.AccountId}",
             token: cancellationToken);
 
+        if (await context.PublishedPosts.AnyAsync(
+            x => x.AccountId == command.AccountId,
+            cancellationToken))
+        {
+            await cache.RemoveByTagAsync(
+                "published-posts",
+                token: cancellationToken);
+        }
         return Result.Success;
     }
 }
