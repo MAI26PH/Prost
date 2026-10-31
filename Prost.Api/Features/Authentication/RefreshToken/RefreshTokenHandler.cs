@@ -16,7 +16,7 @@ internal sealed class RefreshTokenHandler(
     ITokenHasher tokenHasher,
     IAccessTokenIssuer accessTokenIssuer,
     IRefreshTokenIssuer refreshTokenIssuer,
-    ITokenFamilyRevocation tokenFamilyRevocation,
+    IRevokedTokenFamilyCache revokedTokenFamilyCache,
     IOptions<RefreshTokenOptions> options
 ) : IRequestHandler<RefreshTokenCommand, ErrorOr<RefreshTokenResponse>>
 {
@@ -66,7 +66,7 @@ internal sealed class RefreshTokenHandler(
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                await tokenFamilyRevocation.RevokeAsync(
+                await revokedTokenFamilyCache.RevokeAsync(
                     tokenFamily.Id,
                     cancellationToken);
             }

@@ -11,7 +11,7 @@ internal sealed class SignOutHandler(
     ProstDbContext context,
     TimeProvider time,
     ITokenHasher tokenHasher,
-    ITokenFamilyRevocation tokenFamilyRevocation
+    IRevokedTokenFamilyCache revokedTokenFamilyCache
 ) : IRequestHandler<SignOutCommand, ErrorOr<Success>>
 {
     public async ValueTask<ErrorOr<Success>> Handle(
@@ -37,7 +37,7 @@ internal sealed class SignOutHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        await tokenFamilyRevocation.RevokeAsync(
+        await revokedTokenFamilyCache.RevokeAsync(
             tokenFamily.Id,
             cancellationToken);
 

@@ -15,10 +15,10 @@ internal static class JwtBearerEventsHandler
 
             return;
         }
-        var tokenFamilyRevocation = context.HttpContext.RequestServices
-            .GetRequiredService<ITokenFamilyRevocation>();
+        var revokedTokenFamilyCache = context.HttpContext.RequestServices
+            .GetRequiredService<IRevokedTokenFamilyCache>();
 
-        if (await tokenFamilyRevocation.IsRevokedAsync(
+        if (await revokedTokenFamilyCache.IsRevokedAsync(
             context.Principal.TokenFamilyId,
             context.HttpContext.RequestAborted))
         {

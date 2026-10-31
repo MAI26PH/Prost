@@ -4,7 +4,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace Prost.Api.Features.Authentication.Services;
 
-internal interface ITokenFamilyRevocation
+internal interface IRevokedTokenFamilyCache
 {
     Task SetAsync(
         TokenFamilyId id,
@@ -20,11 +20,11 @@ internal interface ITokenFamilyRevocation
         CancellationToken cancellationToken = default);
 }
 
-[Service<ITokenFamilyRevocation>(ServiceLifetime.Singleton)]
-internal sealed class TokenFamilyRevocation(
+[Service<IRevokedTokenFamilyCache>(ServiceLifetime.Singleton)]
+internal sealed class RevokedTokenFamilyCache(
     IFusionCache cache,
     TimeProvider time
-) : ITokenFamilyRevocation
+) : IRevokedTokenFamilyCache
 {
     private static string CacheKeyOf(TokenFamilyId id) =>
         $"token-families:{id}:revocation";
