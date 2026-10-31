@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using Prost.Api.Common.Attributes;
 using Prost.Api.Common.Caching;
+using Prost.Api.Common.Options;
 using Prost.Api.Domain.Entities;
-using Prost.Api.Features.Authentication.Options;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Prost.Api.Features.Authentication.Caching;

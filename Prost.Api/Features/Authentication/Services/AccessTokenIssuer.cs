@@ -2,9 +2,9 @@
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Prost.Api.Common.Attributes;
+using Prost.Api.Common.Options;
 using Prost.Api.Common.Services;
 using Prost.Api.Domain.Entities;
-using Prost.Api.Features.Authentication.Options;
 using System.Security.Claims;
 using System.Text;
 

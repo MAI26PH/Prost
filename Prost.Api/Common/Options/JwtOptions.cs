@@ -2,7 +2,7 @@
 using Prost.Api.Common.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace Prost.Api.Features.Authentication.Options;
+namespace Prost.Api.Common.Options;
 
 [Options("Jwt")]
 internal sealed class JwtOptions

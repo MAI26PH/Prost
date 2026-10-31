@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Prost.Api.Common.Options;
 using Prost.Api.Features.Authentication.JwtBearer;
-using Prost.Api.Features.Authentication.Options;
 using System.Text;
 
 namespace Prost.Api.Features.Authentication;
