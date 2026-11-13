@@ -5,4 +5,7 @@
     <File Path="Directory.Packages.props" />
     <File Path="dotnet-tools.json" />
   </Folder>
+  <Folder Name="/src/">
+    <Project Path="Prost.Api/Prost.Api.csproj" Id="f3430d71-e619-4385-9290-5594842532c6" />
+  </Folder>
 </Solution>
