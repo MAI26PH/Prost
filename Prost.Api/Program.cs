@@ -68,6 +68,8 @@ builder.Services
         });
     });
 
+builder.Services.AddSingleton(TimeProvider.System);
+
 builder.Services.AddOptionsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddServicesFromAssembly(typeof(Program).Assembly);
