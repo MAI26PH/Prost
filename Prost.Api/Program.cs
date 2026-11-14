@@ -2,6 +2,7 @@ using Asp.Versioning;
 using FluentValidation;
 using Microsoft.OpenApi;
 using Prost.Api.Common.Diagnostics;
+using Prost.Api.Common.Validation;
 using Prost.Api.Data;
 using Prost.Api.Data.Diagnostics;
 using Scalar.AspNetCore;
@@ -67,6 +68,13 @@ builder.Services
     });
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+builder.Services.AddMediator(options =>
+{
+    options.Assemblies = [typeof(Program).Assembly];
+    options.PipelineBehaviors = [typeof(ValidationBehavior<,>)];
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+});
 
 builder.Services.AddData(builder.Configuration);
 
