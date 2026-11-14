@@ -25,6 +25,7 @@ public sealed class TokenFamily :
     }
 
     public Account Account { get; } = null!;
+    public ICollection<RefreshToken> RefreshTokens { get; } = [];
 
     private TokenFamily(
         Id<TokenFamily> id,
