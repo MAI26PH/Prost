@@ -8,6 +8,7 @@ internal sealed class ProstDbContext(
 ) : DbContext(options)
 {
     public DbSet<Account> Accounts => Set<Account>();
+    public DbSet<PasswordCredential> PasswordCredentials => Set<PasswordCredential>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
