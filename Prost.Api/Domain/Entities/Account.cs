@@ -26,6 +26,8 @@ public sealed class Account :
 
     public uint RowVersion { get; }
 
+    public PasswordCredential? PasswordCredential { get; }
+
     private Account(Id<Account> id) : base(id)
     {
         Email = default!;
