@@ -70,6 +70,8 @@ builder.Services
 
 builder.Services.AddOptionsFromAssembly(typeof(Program).Assembly);
 
+builder.Services.AddServicesFromAssembly(typeof(Program).Assembly);
+
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddMediator(options =>
