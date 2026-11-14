@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using ZiggyCreatures.Caching.Fusion;
+using ZiggyCreatures.Caching.Fusion.Serialization.SystemTextJson;
 
 namespace Prost.Api.Data;
 
@@ -12,6 +15,16 @@ public static class DataDependencyInjection
             configuration.GetConnectionString("Postgres")
                 ?? throw new InvalidOperationException(
                     "Connection string 'Postgres' is not configured.")));
+
+        services
+            .AddFusionCache()
+            .WithDefaultEntryOptions(new FusionCacheEntryOptions
+            {
+                Duration = TimeSpan.FromMinutes(15),
+                JitterMaxDuration = TimeSpan.FromSeconds(30),
+            })
+            .WithSerializer(new FusionCacheSystemTextJsonSerializer(
+                new JsonSerializerOptions { IncludeFields = true }));
 
         return services;
     }
