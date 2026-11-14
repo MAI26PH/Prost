@@ -1,4 +1,6 @@
-﻿namespace Prost.Api.Common.Routing;
+﻿using Prost.Api.Common.DependencyInjection;
+
+namespace Prost.Api.Common.Routing;
 
 public abstract class EndpointConfiguration
 {
@@ -13,4 +15,11 @@ public abstract class EndpointConfiguration<TSelf> :
 {
     public abstract IEndpointRouteBuilder Configure(
         IEndpointRouteBuilder builder);
+
+    public override void MapEndpointConfiguration(
+        IApplicationBuilder app,
+        IEndpointRouteBuilder builder)
+    {
+        app.MapEndpointsFromConfiguration<TSelf>(Configure(builder));
+    }
 }
