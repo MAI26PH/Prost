@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.OpenApi;
+using Prost.Api.Data;
 using Scalar.AspNetCore;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -61,6 +62,8 @@ builder.Services
             return Task.CompletedTask;
         });
     });
+
+builder.Services.AddData(builder.Configuration);
 
 builder.Services.AddProblemDetails();
 
