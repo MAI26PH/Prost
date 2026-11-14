@@ -27,6 +27,7 @@ public sealed class Account :
     public uint RowVersion { get; }
 
     public PasswordCredential? PasswordCredential { get; }
+    public ICollection<TokenFamily> TokenFamilies { get; } = [];
 
     private Account(Id<Account> id) : base(id)
     {
