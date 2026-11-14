@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Prost.Api.Data.Interceptors;
 using System.Text.Json;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.SystemTextJson;
@@ -11,10 +12,11 @@ public static class DataDependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<ProstDbContext>(options => options.UseNpgsql(
-            configuration.GetConnectionString("Postgres")
+        services.AddDbContext<ProstDbContext>((sp, options) => options
+            .UseNpgsql(configuration.GetConnectionString("Postgres")
                 ?? throw new InvalidOperationException(
-                    "Connection string 'Postgres' is not configured.")));
+                    "Connection string 'Postgres' is not configured."))
+            .AddInterceptors(sp.GetRequiredService<TimestampsInterceptor>()));
 
         services
             .AddFusionCache()
