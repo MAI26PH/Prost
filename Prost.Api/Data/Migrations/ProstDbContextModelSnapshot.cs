@@ -17,7 +17,7 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261114040052_CreateTokenFamiliesTable";
+    public override string LastMigrationId => "20261114041317_CreateRefreshTokensTable";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -97,6 +97,44 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("PasswordCredentials");
             });
 
+        modelBuilder.Entity("Prost.Api.Domain.Entities.RefreshToken", b =>
+            {
+                b.Property<Guid>("Id")
+                    .HasColumnType("uuid");
+
+                b.Property<DateTimeOffset?>("ConsumedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset>("CreatedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset>("ExpiresAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<uint>("RowVersion")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
+
+                b.Property<Guid>("TokenFamilyId")
+                    .HasColumnType("uuid");
+
+                b.Property<string>("TokenHash")
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .HasColumnType("character varying(128)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("TokenFamilyId");
+
+                b.HasIndex("TokenHash")
+                    .IsUnique();
+
+                b.ToTable("RefreshTokens");
+            });
+
         modelBuilder.Entity("Prost.Api.Domain.Entities.TokenFamily", b =>
             {
                 b.Property<Guid>("Id")
@@ -129,6 +167,17 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("Account");
             });
 
+        modelBuilder.Entity("Prost.Api.Domain.Entities.RefreshToken", b =>
+            {
+                b.HasOne("Prost.Api.Domain.Entities.TokenFamily", "TokenFamily")
+                    .WithMany("RefreshTokens")
+                    .HasForeignKey("TokenFamilyId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("TokenFamily");
+            });
+
         modelBuilder.Entity("Prost.Api.Domain.Entities.TokenFamily", b =>
             {
                 b.HasOne("Prost.Api.Domain.Entities.Account", "Account")
@@ -145,6 +194,11 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("PasswordCredential");
 
                 b.Navigation("TokenFamilies");
+            });
+
+        modelBuilder.Entity("Prost.Api.Domain.Entities.TokenFamily", b =>
+            {
+                b.Navigation("RefreshTokens");
             });
 #pragma warning restore 612, 618
     }
