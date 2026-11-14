@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.OpenApi;
+using Prost.Api.Common.Diagnostics;
 using Prost.Api.Data;
 using Prost.Api.Data.Diagnostics;
 using Scalar.AspNetCore;
@@ -68,6 +69,7 @@ builder.Services.AddData(builder.Configuration);
 
 builder.Services
     .AddHealthChecks()
+    .AddSelfHealthCheck()
     .AddDataHealthChecks(builder.Configuration);
 
 builder.Services.AddProblemDetails();
@@ -102,6 +104,7 @@ if (app.Environment.IsDevelopment())
        .ExcludeFromDescription();
 }
 
-app.MapDataHealthChecks();
+app.MapSelfHealthCheck()
+   .MapDataHealthChecks();
 
 app.Run();
