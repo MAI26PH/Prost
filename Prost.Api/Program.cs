@@ -72,6 +72,8 @@ builder.Services.AddOptionsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddServicesFromAssembly(typeof(Program).Assembly);
 
+builder.Services.AddEndpointsFromAssembly(typeof(Program).Assembly);
+
 builder.Services.AddEndpointConfigurationsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
