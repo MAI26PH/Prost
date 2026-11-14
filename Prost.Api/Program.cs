@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using FluentValidation;
 using Microsoft.OpenApi;
 using Prost.Api.Common.Diagnostics;
 using Prost.Api.Data;
@@ -64,6 +65,8 @@ builder.Services
             return Task.CompletedTask;
         });
     });
+
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddData(builder.Configuration);
 
