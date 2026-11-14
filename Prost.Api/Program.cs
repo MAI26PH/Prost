@@ -65,6 +65,8 @@ builder.Services
 
 builder.Services.AddData(builder.Configuration);
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
