@@ -17,7 +17,7 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261114035205_CreatePasswordCredentialsTable";
+    public override string LastMigrationId => "20261114040052_CreateTokenFamiliesTable";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -97,6 +97,27 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("PasswordCredentials");
             });
 
+        modelBuilder.Entity("Prost.Api.Domain.Entities.TokenFamily", b =>
+            {
+                b.Property<Guid>("Id")
+                    .HasColumnType("uuid");
+
+                b.Property<Guid>("AccountId")
+                    .HasColumnType("uuid");
+
+                b.Property<DateTimeOffset>("CreatedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("RevokedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.HasKey("Id");
+
+                b.HasIndex("AccountId");
+
+                b.ToTable("TokenFamilies");
+            });
+
         modelBuilder.Entity("Prost.Api.Domain.Entities.PasswordCredential", b =>
             {
                 b.HasOne("Prost.Api.Domain.Entities.Account", "Account")
@@ -108,9 +129,22 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("Account");
             });
 
+        modelBuilder.Entity("Prost.Api.Domain.Entities.TokenFamily", b =>
+            {
+                b.HasOne("Prost.Api.Domain.Entities.Account", "Account")
+                    .WithMany("TokenFamilies")
+                    .HasForeignKey("AccountId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Account");
+            });
+
         modelBuilder.Entity("Prost.Api.Domain.Entities.Account", b =>
             {
                 b.Navigation("PasswordCredential");
+
+                b.Navigation("TokenFamilies");
             });
 #pragma warning restore 612, 618
     }
