@@ -72,6 +72,8 @@ builder.Services.AddOptionsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddServicesFromAssembly(typeof(Program).Assembly);
 
+builder.Services.AddEndpointConfigurationsFromAssembly(typeof(Program).Assembly);
+
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddMediator(options =>
@@ -122,5 +124,9 @@ if (app.Environment.IsDevelopment())
 
 app.MapSelfHealthCheck()
    .MapDataHealthChecks();
+
+app.MapEndpointConfigurations(
+    app.NewVersionedApi()
+       .MapGroup("api/v{version:apiVersion}"));
 
 app.Run();
