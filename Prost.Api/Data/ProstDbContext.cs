@@ -9,6 +9,7 @@ internal sealed class ProstDbContext(
 {
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<PasswordCredential> PasswordCredentials => Set<PasswordCredential>();
+    public DbSet<TokenFamily> TokenFamilies => Set<TokenFamily>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
