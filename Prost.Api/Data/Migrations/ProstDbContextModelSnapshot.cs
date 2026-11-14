@@ -17,7 +17,7 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261114032926_CreateAccountsTable";
+    public override string LastMigrationId => "20261114035205_CreatePasswordCredentialsTable";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -62,6 +62,55 @@ partial class ProstDbContextModelSnapshot : ModelSnapshot
                     .IsUnique();
 
                 b.ToTable("Accounts");
+            });
+
+        modelBuilder.Entity("Prost.Api.Domain.Entities.PasswordCredential", b =>
+            {
+                b.Property<Guid>("Id")
+                    .HasColumnType("uuid");
+
+                b.Property<Guid>("AccountId")
+                    .HasColumnType("uuid");
+
+                b.Property<DateTimeOffset>("CreatedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("PasswordHash")
+                    .IsRequired()
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
+
+                b.Property<uint>("RowVersion")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
+
+                b.Property<DateTimeOffset?>("UpdatedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.HasKey("Id");
+
+                b.HasIndex("AccountId")
+                    .IsUnique();
+
+                b.ToTable("PasswordCredentials");
+            });
+
+        modelBuilder.Entity("Prost.Api.Domain.Entities.PasswordCredential", b =>
+            {
+                b.HasOne("Prost.Api.Domain.Entities.Account", "Account")
+                    .WithOne("PasswordCredential")
+                    .HasForeignKey("Prost.Api.Domain.Entities.PasswordCredential", "AccountId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Account");
+            });
+
+        modelBuilder.Entity("Prost.Api.Domain.Entities.Account", b =>
+            {
+                b.Navigation("PasswordCredential");
             });
 #pragma warning restore 612, 618
     }
