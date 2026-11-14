@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Microsoft.OpenApi;
 using Prost.Api.Data;
+using Prost.Api.Data.Diagnostics;
 using Scalar.AspNetCore;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -65,7 +66,9 @@ builder.Services
 
 builder.Services.AddData(builder.Configuration);
 
-builder.Services.AddHealthChecks();
+builder.Services
+    .AddHealthChecks()
+    .AddDataHealthChecks(builder.Configuration);
 
 builder.Services.AddProblemDetails();
 
@@ -98,5 +101,7 @@ if (app.Environment.IsDevelopment())
     app.MapGet("/", () => Results.Redirect("/scalar"))
        .ExcludeFromDescription();
 }
+
+app.MapDataHealthChecks();
 
 app.Run();
